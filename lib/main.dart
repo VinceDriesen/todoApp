@@ -31,7 +31,7 @@ class TodoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Todo App',
-      home: TodolistView(),
+      home: TodolistScreen(),
     );
   }
 }
