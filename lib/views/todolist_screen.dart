@@ -59,15 +59,11 @@ class NewListButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => {
-        showNewList(context, dao)
-      },
+      onTap: () => {showNewList(context, dao)},
       borderRadius: BorderRadius.circular(5),
       child: Ink(
         width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
         padding: const EdgeInsets.all(12),
         child: Row(
           children: const [
@@ -167,7 +163,14 @@ class TodolistOptie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => {},
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TaskScreen(todoListName: todolistTitle),
+          ),
+        ),
+      },
       child: Ink(
         width: double.infinity,
         decoration: BoxDecoration(

@@ -17,11 +17,7 @@ class AppDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDB,
-    );
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -36,7 +32,9 @@ class AppDatabase {
     CREATE TABLE tasks(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
+      description TEXT,
       isDone INTEGER NOT NULL,
+      dueDate TEXT,
       listId INTEGER NOT NULL,
       FOREIGN KEY (listId) REFERENCES todolists (id) ON DELETE CASCADE
     )
