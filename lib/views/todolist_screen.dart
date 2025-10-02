@@ -4,8 +4,21 @@ import '../data/dao/todolist_dao.dart';
 import '../data/models/todoList.dart';
 import './tasks_screen.dart';
 
-class TodolistScreen extends StatelessWidget {
+class TodolistScreen extends StatefulWidget {
   const TodolistScreen({super.key});
+
+  @override
+  State<TodolistScreen> createState() => _TodolistScreenState();
+}
+
+// https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html
+class _TodolistScreenState extends State<TodolistScreen> {
+  int refreshKey = 0;
+  void refreshLists() {
+    setState(() {
+      refreshKey++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +56,9 @@ class TodolistScreen extends StatelessWidget {
               ),
             ),
           ),
-          TodoListOpties(dao: todoListDao),
+          TodoListOpties(dao: todoListDao, key: ValueKey(refreshKey)),
           const Spacer(),
-          NewListButton(dao: todoListDao),
+          NewListButton(dao: todoListDao, onListAdded: refreshLists),
         ],
       ),
     );
@@ -53,8 +66,13 @@ class TodolistScreen extends StatelessWidget {
 }
 
 class NewListButton extends StatelessWidget {
-  const NewListButton({super.key, required this.dao});
+  const NewListButton({
+    super.key,
+    required this.dao,
+    required this.onListAdded,
+  });
   final TodoListDao dao;
+  final VoidCallback onListAdded;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +117,7 @@ class NewListButton extends StatelessWidget {
                 if (name.isNotEmpty) {
                   await dao.insertList(TodoList(name: name));
                   Navigator.of(context).pop();
+                  onListAdded();
                 }
               },
             ),
@@ -117,6 +136,7 @@ class TodoListOpties extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: FutureBuilder(
+        key: key,
         future: dao.getLists(),
         builder: (context, asyncSnapshot) {
           if (asyncSnapshot.connectionState == ConnectionState.waiting) {
